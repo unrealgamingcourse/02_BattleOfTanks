@@ -21,6 +21,7 @@
 
 # Fortran module files
 *.mod
+*.VC.db
 
 # Compiled Static libraries
 *.lai
