@@ -1,8 +1,9 @@
+TanksBattle/Content/StarterContent/
+
 *.VC.db
 BattleTank.VC.VC.opendb
 .vs/
 
-TanksBattle/Content/StarterContent/
 
 # Compiled Object files
 *.slo
