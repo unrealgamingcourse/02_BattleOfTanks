@@ -26,8 +26,22 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-void RotateTurret();
+	UFUNCTION(BlueprintCallable, Category = Tank)
+	void SetTurretChildActor(UChildActorComponent *TurretFromBP);
 
+	UFUNCTION(BlueprintCallable, Category = Tank)
+	void SetBarrelChildActor(UChildActorComponent *BarrelFromBP);
 	
-	
+
+private:
+
+	/*
+		void RotateTurret();
+		void RotateTurretn();
+	*/
+	void TurretRotate(float speed);
+	void BarrelRotate(float speed);
+
+	UChildActorComponent *Turret = nullptr;
+	UChildActorComponent *Barrel = nullptr;
 };
