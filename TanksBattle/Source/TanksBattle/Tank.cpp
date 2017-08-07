@@ -23,6 +23,7 @@ void ATank::BeginPlay()
 void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	GetWorld()->DeltaTimeSeconds;
 
 }
 
@@ -38,6 +39,8 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	
 	InputComponent->BindAxis("Turret_Rotate", this, &ATank::TurretRotate);
 	InputComponent->BindAxis("Barrel_Rotate", this, &ATank::BarrelRotate);
+	InputComponent->BindAxis("Move_Tank", this, &ATank::TankMove);
+	InputComponent->BindAxis("Rotate_Tank", this, &ATank::TankRotate);
 }
 
 /*
@@ -60,7 +63,14 @@ void ATank::TurretRotate(float speed)
 	{
 		return;
 	}
-	Turret->AddRelativeRotation(FRotator(0, speed, 0));
+	
+	// PREVIOUSLY THIS METHOD WAS USED.
+
+	//Turret->AddRelativeRotation(FRotator(0, speed, 0));
+
+	float Rotation = GetWorld()->DeltaTimeSeconds*speed*RotationSpeed;
+	Turret->AddRelativeRotation(FRotator(0, Rotation, 0));
+
 }
 
 void ATank::BarrelRotate(float speed)
@@ -69,11 +79,47 @@ void ATank::BarrelRotate(float speed)
 	{
 		return;
 	}
-	Barrel->AddRelativeRotation(FRotator(speed, 0, 0));
+
+	// PREVIOUSLY THIS METHOD WAS USED.
+
+	//Barrel->AddRelativeRotation(FRotator(speed, 0, 0));
+	float Rotation = GetWorld()->DeltaTimeSeconds*speed*RotationSpeed;
+	Barrel->AddRelativeRotation(FRotator(Rotation, 0, 0));
+}
+
+void ATank::TankMove(float speed)
+{
+	if (!Tank)
+	{
+		return;
+	}
+
+	float Distance = GetWorld()->DeltaTimeSeconds*speed*MovementSpeed;
+
+	Tank->AddRelativeLocation(Tank->GetForwardVector()*Distance);
+}
+
+void ATank::TankRotate(float speed)
+{
+	if (!Tank)
+	{
+		return;
+	}
+
+	// PREVIOUSLY THIS METHOD WAS USED.
+
+	//Tank->AddRelativeRotation(FRotator(0, speed, 0));
+
+	float Rotation = GetWorld()->DeltaTimeSeconds*speed*RotationSpeed;
+	Tank->AddRelativeRotation(FRotator(0, Rotation, 0));
 }
 
 void ATank::SetTurretChildActor(UChildActorComponent * TurretFromBP)
 {
+	if (!TurretFromBP)
+	{
+		return;
+	}
 	UE_LOG(LogTemp, Warning, TEXT("SetTurretChildActor called!"));
 
 	Turret = TurretFromBP;
@@ -81,9 +127,22 @@ void ATank::SetTurretChildActor(UChildActorComponent * TurretFromBP)
 
 void ATank::SetBarrelChildActor(UChildActorComponent * BarrelFromBP)
 {
+	if (!BarrelFromBP)
+	{
+		return;
+	}
 	UE_LOG(LogTemp, Warning, TEXT("SetBarrelChildActor called!"));
 
 	Barrel = BarrelFromBP;
+}
+
+void ATank::SetTankChildActor(UChildActorComponent * TankFromBP)
+{
+	if (!TankFromBP)
+	{
+		return;
+	}
+	Tank = TankFromBP;
 }
 
 
